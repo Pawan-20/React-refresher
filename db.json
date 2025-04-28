@@ -1,0 +1,28 @@
+{
+  "pages": [
+    {
+      "pageNumber": 1,
+      "date": "2024-01-01",
+      "keyValueData": {
+        "name": "John Doe",
+        "age": "30"
+      },
+      "tableData": [
+        { "column1": "r1c1", "column2": "r1c2", "column3": "r1c3" }
+      ],
+      "description": "This is page 1 description."
+    },
+    {
+      "pageNumber": 2,
+      "date": "2024-01-02",
+      "keyValueData": {
+        "name": "Jane Smith",
+        "age": "25"
+      },
+      "tableData": [
+        { "column1": "r2c1", "column2": "r2c2", "column3": "r2c3" }
+      ],
+      "description": "This is page 2 description."
+    }
+  ]
+}
