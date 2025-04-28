@@ -1,12 +1,13 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./HomePage";
 import "./index.css";
 import LearnPage from "./LearnPage";
 import LearnChildPage from "./LearnChildPage";
-import DataVerificationPage from "./DataVerificationPage";
+import { DataVerificationPage } from "./DataVerificationPage";
+import Test from "./components/Test";
 export default function App() {
   return (
-    <div className="p-4 bg-teal-500">
+    <div className="p-4">
       <Routes>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path="/learn" element={<LearnPage></LearnPage>}></Route>
@@ -18,7 +19,12 @@ export default function App() {
           path="/data-verification"
           element={<DataVerificationPage></DataVerificationPage>}
         ></Route>
-        <Route path="*" element={<HomePage></HomePage>}></Route>
+        <Route path="/test" element={<Test></Test>}></Route>
+        <Route
+          path="*"
+          element={<Navigate to="/" replace></Navigate>}
+        ></Route>{" "}
+        {/* replace  does nto remember the fake route */}
       </Routes>
     </div>
   );
