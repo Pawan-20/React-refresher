@@ -10,10 +10,9 @@ export const DataVerificationPage = () => {
     setPageNumber((prev) => prev + 1);
   };
 
-  const handlePrev = () => {
+  function handlePrev() {
     setPageNumber((prev) => (prev > 1 ? prev - 1 : 1));
-  };
-
+  }
   const handleSave = () => {
     console.log("Saving data...");
     // Here later we'll call API
