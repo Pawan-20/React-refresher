@@ -31,6 +31,8 @@ const TableComponent = () => {
     },
   ]);
 
+  const [editMode, setEditMode] = useState<number | null>(null); // Track which row is being edited
+
   const handleDeleteClick = (id: number) => {
     setTableData((prev) => prev.filter((row) => row.id !== id));
   };
@@ -48,6 +50,14 @@ const TableComponent = () => {
     setTableData(newData);
   };
 
+  const toggleEditMode = (id: number) => {
+    if (editMode === id) {
+      setEditMode(null); // Disable edit mode if the row is already in edit mode
+    } else {
+      setEditMode(id); // Enable edit mode for the selected row
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table-auto w-full">
@@ -63,31 +73,43 @@ const TableComponent = () => {
           {tableData.map((row) => (
             <tr key={row.id}>
               <td className="px-2 py-1">
-                <input
-                  value={row.header1}
-                  onChange={(e) =>
-                    handleEditClick(row.id, "header1", e.target.value)
-                  }
-                  className="border p-1 rounded w-24"
-                />
+                {editMode === row.id ? (
+                  <input
+                    value={row.header1}
+                    onChange={(e) =>
+                      handleEditClick(row.id, "header1", e.target.value)
+                    }
+                    className="border p-1 rounded w-24"
+                  />
+                ) : (
+                  row.header1
+                )}
               </td>
               <td className="px-2 py-1">
-                <input
-                  value={row.header2}
-                  onChange={(e) =>
-                    handleEditClick(row.id, "header2", e.target.value)
-                  }
-                  className="border p-1 rounded w-24"
-                />
+                {editMode === row.id ? (
+                  <input
+                    value={row.header2}
+                    onChange={(e) =>
+                      handleEditClick(row.id, "header2", e.target.value)
+                    }
+                    className="border p-1 rounded w-24"
+                  />
+                ) : (
+                  row.header2
+                )}
               </td>
               <td className="px-2 py-1">
-                <input
-                  value={row.header3}
-                  onChange={(e) =>
-                    handleEditClick(row.id, "header3", e.target.value)
-                  }
-                  className="border p-1 rounded w-24"
-                />
+                {editMode === row.id ? (
+                  <input
+                    value={row.header3}
+                    onChange={(e) =>
+                      handleEditClick(row.id, "header3", e.target.value)
+                    }
+                    className="border p-1 rounded w-24"
+                  />
+                ) : (
+                  row.header3
+                )}
               </td>
               <td className="px-2 py-1 flex gap-2">
                 <button
@@ -95,6 +117,12 @@ const TableComponent = () => {
                   className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
+                </button>
+                <button
+                  onClick={() => toggleEditMode(row.id)}
+                  className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  {editMode === row.id ? "Save" : "Edit"}
                 </button>
               </td>
             </tr>
