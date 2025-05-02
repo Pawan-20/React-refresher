@@ -24,7 +24,7 @@ export default function App() {
           path="*"
           element={<Navigate to="/" replace></Navigate>}
         ></Route>{" "}
-        {/* replace  does nto remember the fake route */}
+        {/* replace  does not remember the fake route */}
       </Routes>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import KeyValueComponent from "./components/KeyValueComponent";
-import DescriptionCard from "./components/DescriptionCard";
+import { DescriptionCard } from "./components/DescriptionCard";
 import TableComponent from "./components/TableComponent";
 
 export const DataVerificationPage = () => {
