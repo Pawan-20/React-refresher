@@ -47,7 +47,20 @@ export const DataVerificationPage = () => {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
   if (!currentPageData)
     return <p className="text-center mt-10">No data for this page.</p>;
-
+  function handleSectionDataChange(updatedSection: string, updatedData: any) {
+    setPagesData((prev) => ({
+      ...prev,
+      [pageNumber]: {
+        ...prev[pageNumber],
+        [updatedSection]: updatedData,
+        isModified: {
+          ...(prev[pageNumber].isModified || {}),
+          [updatedSection]: true,
+        },
+      },
+    }));
+    console.log(JSON.stringify(pagesData, null, 2), "PageData");
+  }
   return (
     <div className="h-screen flex flex-col p-4 bg-gray-100 ">
       {/* Header */}
@@ -79,6 +92,7 @@ export const DataVerificationPage = () => {
         <div className="flex-1 bg-white rounded-lg shadow p-4 overflow-y-auto">
           <DescriptionCard
             currentPageDescription={currentPageData.description}
+            onDataChange={handleSectionDataChange}
           />
         </div>
 

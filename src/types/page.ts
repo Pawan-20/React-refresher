@@ -14,4 +14,9 @@ export interface PageDataType {
   keyValueData: KeyValueDataType;
   tableData: TableRow[];
   description: string;
+  isModified?: {
+    keyValueData?: boolean;
+    tableData?: boolean;
+    description?: boolean;
+  };
 }

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 
 type DescriptionCardType = {
   currentPageDescription: string;
+  onDataChange: (updatedSection: "description", updatedValue: string) => void;
 };
 export const DescriptionCard = ({
   currentPageDescription,
+  onDataChange,
 }: DescriptionCardType) => {
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(currentPageDescription);
@@ -15,6 +17,7 @@ export const DescriptionCard = ({
 
   const handleSaveClick = () => {
     setIsEditing(false);
+    onDataChange("description", description);
     // You can also send updated data to parent later
     console.log("Saved description:", description);
   };
