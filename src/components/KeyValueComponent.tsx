@@ -1,7 +1,7 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 type KeyValue = {
-  id: number;
+  id: string;
   key: string;
   value: string;
 };
@@ -10,16 +10,9 @@ type KeyValueProps = {
 };
 
 export const KeyValueComponent = ({ keyValueData }: KeyValueProps) => {
-  const initialList = Object.entries(keyValueData).map(
-    ([key, value], index) => ({
-      id: index + 1,
-      key,
-      value,
-    })
-  );
-  const [keyValueList, setKeyValueList] = useState<KeyValue[]>(initialList);
+  const [keyValueList, setKeyValueList] = useState<KeyValue[]>([]);
 
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [editedKey, setEditedKey] = useState("");
   const [editedValue, setEditedValue] = useState("");
 
@@ -29,19 +22,26 @@ export const KeyValueComponent = ({ keyValueData }: KeyValueProps) => {
     setEditedValue(item.value);
   };
 
-  const handleSaveClick = (id: number) => {
-    setKeyValueList((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, key: editedKey, value: editedValue } : item
-      )
+  const handleSaveClick = (id: string) => {
+    const newList = keyValueList.map((item) =>
+      item.id === id ? { ...item, key: editedKey, value: editedValue } : item
     );
+    setKeyValueList(newList);
     setEditingId(null);
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setKeyValueList((prev) => prev.filter((item) => item.id !== id));
   };
-
+  useEffect(() => {
+    let initialList = Object.entries(keyValueData).map(([key, value]) => ({
+      id: uuid(),
+      key,
+      value,
+    }));
+    setKeyValueList(initialList);
+    setEditingId(null);
+  }, [keyValueData]);
   return (
     <div>
       <h2 className="text-lg font-semibold mb-4">Key-Value Pairs</h2>

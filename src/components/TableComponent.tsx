@@ -1,7 +1,7 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 type TableRow = {
-  id: number;
+  id: string;
   column1: string;
   column2: string;
   column3: string;
@@ -12,19 +12,16 @@ type TableProps = {
   tableData: { column1: string; column2: string; column3: string }[];
 };
 const TableComponent = ({ tableData }: TableProps) => {
-  const initialData = tableData.map((data, id) => {
-    return { ...data, id: id + 1 };
-  });
-  const [tableState, setTableState] = useState<TableRow[]>(initialData);
+  const [tableState, setTableState] = useState<TableRow[]>([]);
 
-  const [editMode, setEditMode] = useState<number | null>(null); // Track which row is being edited
+  const [editMode, setEditMode] = useState<string | null>(null); // Track which row is being edited
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setTableState((prev) => prev.filter((row) => row.id !== id));
   };
 
   const handleEditClick = (
-    id: number,
+    id: string,
     column: EditableColumn,
     value: string
   ) => {
@@ -36,7 +33,7 @@ const TableComponent = ({ tableData }: TableProps) => {
     setTableState(newData);
   };
 
-  const toggleEditMode = (id: number) => {
+  const toggleEditMode = (id: string) => {
     if (editMode === id) {
       setEditMode(null); // Disable edit mode if the row is already in edit mode
     } else {
@@ -44,6 +41,13 @@ const TableComponent = ({ tableData }: TableProps) => {
     }
   };
 
+  useEffect(() => {
+    let initialData = tableData.map((data) => {
+      return { ...data, id: uuid() };
+    });
+    setTableState(initialData);
+    setEditMode(null);
+  }, [tableData]);
   return (
     <div className="overflow-x-auto">
       <table className="table-auto w-full">

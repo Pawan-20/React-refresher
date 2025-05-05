@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type DescriptionCardType = {
   currentPageDescription: string;
@@ -18,6 +18,11 @@ export const DescriptionCard = ({
     // You can also send updated data to parent later
     console.log("Saved description:", description);
   };
+
+  useEffect(() => {
+    setDescription(currentPageDescription);
+    setIsEditing(false);
+  }, [currentPageDescription]);
 
   return (
     <div className="flex flex-col h-full">
