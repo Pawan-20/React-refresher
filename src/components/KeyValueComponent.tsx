@@ -5,13 +5,19 @@ type KeyValue = {
   key: string;
   value: string;
 };
+type KeyValueProps = {
+  keyValueData: Record<string, string>;
+};
 
-export const KeyValueComponent = () => {
-  const [keyValueList, setKeyValueList] = useState<KeyValue[]>([
-    { id: 1, key: "Name", value: "John Doe" },
-    { id: 2, key: "Age", value: "30" },
-    { id: 3, key: "Country", value: "USA" },
-  ]);
+export const KeyValueComponent = ({ keyValueData }: KeyValueProps) => {
+  const initialList = Object.entries(keyValueData).map(
+    ([key, value], index) => ({
+      id: index + 1,
+      key,
+      value,
+    })
+  );
+  const [keyValueList, setKeyValueList] = useState<KeyValue[]>(initialList);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedKey, setEditedKey] = useState("");
@@ -40,7 +46,7 @@ export const KeyValueComponent = () => {
     <div>
       <h2 className="text-lg font-semibold mb-4">Key-Value Pairs</h2>
 
-      <div className="flex flex-col gap-4 border-2">
+      <div className="flex-1 overflow-auto flex flex-col gap-4 border-2 ">
         {keyValueList.map((item) => (
           <div
             key={item.id}

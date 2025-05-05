@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-export const DescriptionCard = () => {
+type DescriptionCardType = {
+  currentPageDescription: string;
+};
+export const DescriptionCard = ({
+  currentPageDescription,
+}: DescriptionCardType) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState(
-    "This is a sample description text."
-  );
+  const [description, setDescription] = useState(currentPageDescription);
 
   const handleEditClick = () => {
     setIsEditing(true);
