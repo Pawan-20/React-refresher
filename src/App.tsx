@@ -9,7 +9,7 @@ import Parent2 from "./components/upliftiing/Parent2";
 
 export default function App() {
   return (
-    <div className="p-4">
+    <div>
       <Routes>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path="/learn" element={<LearnPage></LearnPage>}></Route>
