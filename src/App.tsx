@@ -5,7 +5,7 @@ import LearnPage from "./LearnPage";
 import LearnChildPage from "./LearnChildPage";
 import { DataVerificationPage } from "./DataVerificationPage";
 import Test from "./components/Test";
-import Parent2 from "./components/upliftiing/Parent2";
+import Parent2 from "./components/loaders/Parent2";
 
 export default function App() {
   return (
