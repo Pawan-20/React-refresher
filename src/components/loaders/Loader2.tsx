@@ -1,6 +1,6 @@
 import React from "react";
 import "../../App.css";
-function Parent2() {
+function Loader() {
   return (
     <div className="bg-white h-screen">
       <div style={{ width: "25vw", height: "180px", padding: "16px" }}>
@@ -42,4 +42,4 @@ function Parent2() {
   );
 }
 
-export default Parent2;
+export default Loader;

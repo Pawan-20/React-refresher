@@ -5,7 +5,9 @@ import LearnPage from "./LearnPage";
 import LearnChildPage from "./LearnChildPage";
 import { DataVerificationPage } from "./DataVerificationPage";
 import Test from "./components/Test";
-import Parent2 from "./components/loaders/Parent2";
+import Loader from "./components/loaders/Loader2";
+import Parent1 from "./components/passingFromChildToParent/Parent";
+import Parent2 from "./components/passingFromChildToParent/Parent2";
 
 export default function App() {
   return (
@@ -22,7 +24,9 @@ export default function App() {
           element={<DataVerificationPage></DataVerificationPage>}
         ></Route>
         <Route path="/test" element={<Test></Test>}></Route>
-        <Route path="/scene2" element={<Parent2></Parent2>}></Route>
+        <Route path="/loader" element={<Loader></Loader>}></Route>
+        <Route path="/c2p1" element={<Parent1></Parent1>}></Route>
+        <Route path="/c2p2" element={<Parent2></Parent2>}></Route>
         <Route
           path="*"
           element={<Navigate to="/" replace></Navigate>}
