@@ -1,22 +1,25 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
+import bellReducer, { BellActions, BellState } from "./BellReducer";
 
-export const BellContext = createContext<any>(null);
-function BellContextReducer({ children }: { children: React.ReactNode }) {
-  const [bellCount, setBellCount] = useState(0);
-
-  const ringBell = () => setBellCount((prev) => prev + 1);
+type BellContextType = {
+  state: BellState;
+  dispatch: React.Dispatch<BellActions>;
+};
+const BellReducerContext = createContext<BellContextType | undefined>(
+  undefined
+);
+function BellContextProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(bellReducer, { count: 0, log: [] });
   return (
-    <BellContext.Provider value={{ bellCount, ringBell }}>
+    <BellReducerContext.Provider value={{ state, dispatch }}>
       {children}
-    </BellContext.Provider>
+    </BellReducerContext.Provider>
   );
 }
+
 export const useBell = () => {
-  const context = useContext(BellContext);
-  if (!context) {
-    throw new Error("useBell must be used within a context provider");
-  }
+  const context = useContext(BellReducerContext);
+  if (!context) throw new Error("useBell must be used within a BellProvider");
   return context;
 };
-
-export default BellContextReducer;
+export default BellContextProvider;
