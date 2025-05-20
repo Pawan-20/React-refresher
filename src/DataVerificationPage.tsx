@@ -11,7 +11,7 @@ export const DataVerificationPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
   const [pagesData, setPagesData] = useState<Record<number, PageDataType>>({});
-
+  const [disableSaveButton, setDisableSaveButton] = useState(true);
   const handleNext = () => {
     setPageNumber((prev) => prev + 1);
   };
@@ -59,6 +59,9 @@ export const DataVerificationPage = () => {
         },
       },
     }));
+    setDisableSaveButton(() => {
+      return false;
+    });
     console.log(JSON.stringify(pagesData, null, 2), "PageData");
   }
   return (
@@ -83,10 +86,13 @@ export const DataVerificationPage = () => {
       </div>
 
       {/* Middle Section - Takes remaining height */}
-      <div className="flex flex-1 gap-6 overflow-hidden">
+      <div className="flex gap-6 overflow-hidden">
         {/* Each Column is scrollable inside */}
         <div className="flex-1 bg-white rounded-lg shadow p-4 overflow-y-auto">
-          <KeyValueComponent keyValueData={currentPageData.keyValueData} />
+          <KeyValueComponent
+            keyValueData={currentPageData.keyValueData}
+            onDataChange={handleSectionDataChange}
+          />
         </div>
 
         <div className="flex-1 bg-white rounded-lg shadow p-4 overflow-y-auto">
@@ -105,7 +111,8 @@ export const DataVerificationPage = () => {
       <div className="text-center mt-4">
         <button
           onClick={handleSave}
-          className="px-6 py-3 bg-green-500 text-white font-semibold rounded hover:bg-green-600"
+          className="px-6 py-3 bg-green-500 text-white font-semibold rounded hover:bg-green-600 disabled:bg-red-400"
+          disabled={disableSaveButton}
         >
           Save
         </button>

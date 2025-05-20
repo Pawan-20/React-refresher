@@ -18,10 +18,6 @@ export default function App() {
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path="/learn" element={<LearnPage></LearnPage>}></Route>
         <Route
-          path="/learn-child"
-          element={<LearnChildPage></LearnChildPage>}
-        ></Route>
-        <Route
           path="/data-verification"
           element={<DataVerificationPage></DataVerificationPage>}
         ></Route>

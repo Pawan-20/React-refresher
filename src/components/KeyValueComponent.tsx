@@ -7,9 +7,16 @@ type KeyValue = {
 };
 type KeyValueProps = {
   keyValueData: Record<string, string>;
+  onDataChange: (
+    updatedSection: "keyValueData",
+    updatedValue: Record<string, string>
+  ) => void;
 };
 
-export const KeyValueComponent = ({ keyValueData }: KeyValueProps) => {
+export const KeyValueComponent = ({
+  keyValueData,
+  onDataChange,
+}: KeyValueProps) => {
   const [keyValueList, setKeyValueList] = useState<KeyValue[]>([]);
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -28,10 +35,23 @@ export const KeyValueComponent = ({ keyValueData }: KeyValueProps) => {
     );
     setKeyValueList(newList);
     setEditingId(null);
+    let data: Record<string, string> = {};
+    newList.forEach((item) => {
+      data[item.key] = item.value;
+    });
+
+    onDataChange("keyValueData", data);
   };
 
   const handleDeleteClick = (id: string) => {
-    setKeyValueList((prev) => prev.filter((item) => item.id !== id));
+    const newList = keyValueList.filter((item) => item.id !== id);
+    setKeyValueList(newList);
+    let data: Record<string, string> = {};
+    newList.forEach((item) => {
+      data[item.key] = item.value;
+    });
+
+    onDataChange("keyValueData", data);
   };
   useEffect(() => {
     let initialList = Object.entries(keyValueData).map(([key, value]) => ({
