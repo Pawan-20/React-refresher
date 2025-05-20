@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useReducer, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import bellReducer, { BellActions, BellState } from "./BellReducer";
+import { loadBellState, saveBellState } from "../../utils/storage";
 
 type BellContextType = {
   state: BellState;
@@ -9,7 +16,10 @@ const BellReducerContext = createContext<BellContextType | undefined>(
   undefined
 );
 function BellContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(bellReducer, { count: 0, log: [] });
+  const [state, dispatch] = useReducer(bellReducer, loadBellState());
+  useEffect(() => {
+    saveBellState(state);
+  }, [state]);
   return (
     <BellReducerContext.Provider value={{ state, dispatch }}>
       {children}
