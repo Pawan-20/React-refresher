@@ -10,10 +10,13 @@ import Parent1 from "./components/passingFromChildToParent/Parent";
 import Parent2 from "./components/passingFromChildToParent/Parent2";
 import Parent3 from "./components/passingFromChildToParent/Parent3";
 import Parent4 from "./components/passingFromChildToParent/Parent4";
+import SchoolProvider from "./contextComponents/SchoolProvider";
+import Child from "./contextComponents/Child";
+import AnotherChild from "./contextComponents/AnotherChild";
 
 export default function App() {
   return (
-    <div>
+    <SchoolProvider>
       <Routes>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path="/learn" element={<LearnPage></LearnPage>}></Route>
@@ -33,6 +36,7 @@ export default function App() {
         ></Route>{" "}
         {/* replace  does not remember the fake route */}
       </Routes>
-    </div>
+      <Child></Child>
+    </SchoolProvider>
   );
 }
