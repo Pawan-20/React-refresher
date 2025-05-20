@@ -11,15 +11,23 @@ export const DataVerificationPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
   const [pagesData, setPagesData] = useState<Record<number, PageDataType>>({});
+  const [tempPagesData, setTempPagesData] = useState<
+    Record<number, PageDataType>
+  >({});
   const [disableSaveButton, setDisableSaveButton] = useState(true);
   const handleNext = () => {
     setPageNumber((prev) => prev + 1);
+    setDisableSaveButton(true);
   };
 
+  useEffect(() => {}, [tempPagesData]);
   function handlePrev() {
     setPageNumber((prev) => (prev > 1 ? prev - 1 : 1));
+    setDisableSaveButton(true);
   }
   const handleSave = () => {
+    setPagesData((prev) => (tempPagesData ? tempPagesData : prev));
+    setDisableSaveButton(true);
     console.log("Saving data...");
     // Here later we'll call API
   };
@@ -34,6 +42,7 @@ export const DataVerificationPage = () => {
           dataMap[page.pageNumber] = page;
         });
         setPagesData(dataMap);
+        setTempPagesData(dataMap);
       } catch (err) {
         console.error("Error fetching pages:", err);
       } finally {
@@ -48,21 +57,18 @@ export const DataVerificationPage = () => {
   if (!currentPageData)
     return <p className="text-center mt-10">No data for this page.</p>;
   function handleSectionDataChange(updatedSection: string, updatedData: any) {
-    setPagesData((prev) => ({
+    setTempPagesData((prev) => ({
       ...prev,
       [pageNumber]: {
         ...prev[pageNumber],
         [updatedSection]: updatedData,
         isModified: {
-          ...(prev[pageNumber].isModified || {}),
+          ...(prev[pageNumber]?.isModified || {}),
           [updatedSection]: true,
         },
       },
     }));
-    setDisableSaveButton(() => {
-      return false;
-    });
-    console.log(JSON.stringify(pagesData, null, 2), "PageData");
+    setDisableSaveButton(false);
   }
   return (
     <div className="h-screen flex flex-col p-4 bg-gray-100 ">
