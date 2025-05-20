@@ -13,10 +13,12 @@ import Parent4 from "./components/passingFromChildToParent/Parent4";
 import SchoolProvider from "./contextComponents/SchoolProvider";
 import Child from "./contextComponents/Child";
 import AnotherChild from "./contextComponents/AnotherChild";
+import ScienceLab from "./advancedContext/bell-reducer/ScienceLab";
+import BellContextReducer from "./advancedContext/bell-reducer/BellContextReducer";
 
 export default function App() {
   return (
-    <SchoolProvider>
+    <BellContextReducer>
       <Routes>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path="/learn" element={<LearnPage></LearnPage>}></Route>
@@ -36,7 +38,8 @@ export default function App() {
         ></Route>{" "}
         {/* replace  does not remember the fake route */}
       </Routes>
-      <Child></Child>
-    </SchoolProvider>
+      {/* <Child></Child> */}
+      <ScienceLab></ScienceLab>
+    </BellContextReducer>
   );
 }
