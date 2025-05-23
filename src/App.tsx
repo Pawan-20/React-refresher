@@ -14,6 +14,7 @@ import Parent4 from "./components/passingFromChildToParent/Parent4";
 import ScienceLab from "./advancedContext/bell-reducer/ScienceLab";
 import BellContextReducer from "./advancedContext/bell-reducer/BellContextReducer";
 import Child from "./contextComponents/Child";
+import RTKIndex from "./rtk/RTKIndex";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
       <Route path="/c2p3" element={<Parent3></Parent3>}></Route>
       <Route path="/c2p4" element={<Parent4></Parent4>}></Route>
       <Route path="/test" element={<Test />}></Route>
+      <Route path="/rtk" element={<RTKIndex />}></Route>
       <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
       {/* replace  does not remember the fake route */}
     </Routes>
