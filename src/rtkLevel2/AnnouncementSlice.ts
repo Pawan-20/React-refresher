@@ -1,128 +1,93 @@
-// AnnouncementSlice.ts
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export type Announcement = {
-  id: number;
+  id: string;
   message: string;
   acknowledgedBy: string[];
 };
-
-type State = {
+type InitialState = {
   announcements: Announcement[];
   loading: boolean;
-  error: string | null;
+  error: string;
 };
 
-const initialState: State = {
+const initialState: InitialState = {
   announcements: [],
-  loading: false,
-  error: null,
+  loading: true,
+  error: "",
 };
 
-// 🔔 Async Thunks
 export const fetchAnnouncements = createAsyncThunk(
-  "announcements/fetch",
+  "fetch/announcement",
   async () => {
-    const res = await axios.get("http://localhost:3001/announcements");
-    return res.data; // this becomes action.payload
+    try {
+      const response = await axios.get(`http://localhost:3001/announcements`);
+      return response.data;
+    } catch (e) {
+      return "Error fetchinf Data";
+    }
   }
 );
 
-/*
-
-Redux Toolkit's createAsyncThunk is like a helper that:
-
-sends the request, and automatically dispatches actions like:
-
-yourThunkName/pending
-
-yourThunkName/fulfilled ✅
-
-yourThunkName/rejected ❌
-
-The fulfilled action it dispatches has this shape:
-
-{
-  type: 'fetchAnnouncements/fulfilled',
-  payload: <data from server>
-}
-  🧩 Piece	🤓 Role
-createAsyncThunk	Sends the request and dispatches pending, fulfilled, or rejected.
-extraReducers	Handles those dispatched actions (especially fulfilled).
-
-In short , asyncThunks will return the data from te serer as actions to the extra reducers
-
-*/
-
-export const acknowledgeAnnouncement = createAsyncThunk(
-  "announcements/acknowledge",
-  async ({ id, user }: { id: number; user: string }) => {
-    // 🔁 Get current announcement from server
-    const res = await axios.get(`http://localhost:3001/announcements/${id}`);
-    const announcement = res.data;
-
-    // ✅ Add user to acknowledgedBy
-    const updated = {
-      ...announcement,
-      acknowledgedBy: [...announcement.acknowledgedBy, user],
-    };
-
-    // 💾 PUT the updated announcement
-    const putRes = await axios.put(
-      `http://localhost:3001/announcements/1`,
-      updated
-    );
-
-    return putRes.data; // Becomes action.payload
+export const addAnnouncement = createAsyncThunk(
+  "add/announcement",
+  (payload: Announcement) => {
+    let newData: Announcement | null = null;
+    fetch("http://localhost:3001/announcements", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    })
+      .then((rawData) => rawData.json())
+      .then((data) => (newData = data))
+      .catch((e) => {
+        return "Something went rong while adding an announcement";
+      });
+    return newData;
   }
 );
-// 📦 Slice
 const announcementSlice = createSlice({
-  name: "announcements",
-  initialState,
+  name: "announcement",
+  initialState: initialState,
   reducers: {
-    addAnnouncement(state, action) {
-      state.announcements.push(action.payload);
-    },
-    removeAnnouncement(state, action) {
+    removeAnnouncement: (state, action: PayloadAction<{ id: string }>) => {
       state.announcements = state.announcements.filter(
-        (a) => a.id !== action.payload
+        (obj: Announcement) => obj.id !== action.payload.id
       );
+      return state;
     },
-    clearAllAnnouncements(state) {
+    clearAllAnnouncements: (state) => {
       state.announcements = [];
+      return state;
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchAnnouncements.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchAnnouncements.fulfilled, (state, action) => {
-        state.loading = false;
-        state.announcements = action.payload;
-      })
-      .addCase(fetchAnnouncements.rejected, (state) => {
-        state.loading = false;
-        state.error = "Failed to fetch announcements.";
-      })
-      .addCase(acknowledgeAnnouncement.fulfilled, (state, action) => {
-        const updated = action.payload;
-        const index = state.announcements.findIndex((a) => a.id === updated.id);
-        if (index !== -1) {
-          state.announcements[index] = updated;
-        }
-      })
-      .addCase(acknowledgeAnnouncement.rejected, (state) => {
-        state.loading = false;
-        state.error = "Failed to fetch announcements.";
-      });
+    builder.addCase(fetchAnnouncements.fulfilled, (state, action) => {
+      // Add user to the state array
+      state.loading = false;
+      state.announcements = action.payload;
+    });
+    builder.addCase(fetchAnnouncements.rejected, (state, action) => {
+      // Add user to the state array
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+    builder.addCase(addAnnouncement.fulfilled, (state, action) => {
+      // Add user to the state array
+      state.loading = false;
+      if (action.payload && typeof action.payload === "object") {
+        state.announcements.push(action.payload as Announcement);
+      }
+    });
+    builder.addCase(addAnnouncement.rejected, (state, action) => {
+      // Add user to the state array
+      state.loading = false;
+      state.error = action.payload as string;
+    });
   },
 });
 
-export const { addAnnouncement, removeAnnouncement, clearAllAnnouncements } =
+export const { removeAnnouncement, clearAllAnnouncements } =
   announcementSlice.actions;
 
 export default announcementSlice.reducer;

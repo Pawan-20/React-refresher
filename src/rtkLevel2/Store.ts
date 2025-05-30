@@ -1,14 +1,12 @@
-// store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import announcementReducer from "./AnnouncementSlice";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    announcements: announcementReducer,
+    announcement: announcementReducer,
   },
 });
 
-export default store;
-
 export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

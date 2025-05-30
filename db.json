@@ -3,12 +3,28 @@
     {
       "id": "1",
       "message": "New lab rules posted",
-      "acknowledgedBy": ["Alice"]
+      "acknowledgedBy": [
+        "Alice"
+      ]
     },
     {
       "id": "2",
-      "message": "New lab rules posted",
+      "message": "Fire Alarm Drill at 1am",
       "acknowledgedBy": []
+    },
+    {
+      "id": "3",
+      "message": "A new announcement",
+      "acknowledgedBy": [
+        "Nobody yet"
+      ]
+    },
+    {
+      "id": "4",
+      "message": "A new announcement",
+      "acknowledgedBy": [
+        "Nobody yet"
+      ]
     }
   ]
 }
