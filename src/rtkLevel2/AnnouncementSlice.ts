@@ -40,7 +40,7 @@ export const addAnnouncement = createAsyncThunk(
     })
       .then((rawData) => rawData.json())
       .then((data) => (newData = data))
-      .catch((e) => {
+      .catch(() => {
         return "Something went rong while adding an announcement";
       });
     return newData;
