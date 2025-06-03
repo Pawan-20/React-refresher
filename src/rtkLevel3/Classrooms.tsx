@@ -20,14 +20,14 @@ const Classrooms = () => {
     dispatch(fetchAnnouncements() as any);
   }, [dispatch]);
 
-  const handleAcknowledge = (id: number) => {
+  const handleAcknowledge = (id: string) => {
     dispatch(acknowledgeAnnouncement({ id, user: "Alice" }) as any);
   };
 
   const handleManualAdd = () => {
     dispatch(
       announcementActions.addAnnouncementManually({
-        id: Date.now(),
+        id: (all.length + 1).toString(),
         message: "Surprise quiz tomorrow!",
         acknowledgedBy: [],
       })

@@ -9,7 +9,7 @@ import axios from "axios";
 import { RootState } from "./store";
 
 export interface Announcement {
-  id: number;
+  id: string;
   message: string;
   acknowledgedBy: string[];
 }
@@ -31,7 +31,7 @@ export const fetchAnnouncements = createAsyncThunk(
 
 export const acknowledgeAnnouncement = createAsyncThunk(
   "announcements/acknowledge",
-  async ({ id, user }: { id: number; user: string }) => {
+  async ({ id, user }: { id: string; user: string }) => {
     const res = await axios.get<Announcement>(
       `http://localhost:3000/announcements/${id}`
     );
