@@ -1,8 +1,9 @@
 // Child.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./new-store";
 import { acknowledgeAnnouncement } from "./StudentSlice";
+import { fetchPaginatedAnnouncements } from "./AnnouncementSlice";
 
 export default function BiologyLab() {
   const dispatch = useDispatch();
@@ -11,6 +12,11 @@ export default function BiologyLab() {
   const announcements = useSelector(
     (state: RootState) => state.bell.announcements
   );
+  const { announcements: dataFromApi, status } = useSelector(
+    (state: RootState) => state.announcement
+  );
+
+  console.log(status, "status");
 
   // 🧒 Get acknowledged announcements from the student slice
   const acknowledged = useSelector(
@@ -21,6 +27,9 @@ export default function BiologyLab() {
     dispatch(acknowledgeAnnouncement({ student: "Alice", announcementId: id }));
   };
 
+  useEffect(() => {
+    dispatch(fetchPaginatedAnnouncements({ page: 1, limit: 2 }) as any);
+  }, []);
   return (
     <div className="p-4">
       <h2 className="text-lg font-bold mb-2">📢 Announcements</h2>
@@ -47,6 +56,14 @@ export default function BiologyLab() {
           </li>
         ))}
       </ul>
+      <hr></hr>
+      {status == "idle" ? (
+        <h1 className="text-red-600">Loading....</h1>
+      ) : (
+        <h3 className="bg-grey-200 border border-b-cyan-800">
+          {JSON.stringify(dataFromApi)}
+        </h3>
+      )}
     </div>
   );
 }

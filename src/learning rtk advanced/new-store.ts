@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import BellReducer from "./BellSlice";
 import StudentReducer from "./StudentSlice";
-import bellReducer from "../advancedContext/bell-reducer/BellReducer";
+import { announcementSlice } from "./AnnouncementSlice";
+
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem("reduxState");
@@ -23,8 +24,14 @@ const saveState = (state: any) => {
 };
 
 export const store = configureStore({
-  reducer: { bell: BellReducer, student: StudentReducer },
-  preloadedState: loadState(),
+  reducer: {
+    bell: BellReducer,
+    student: StudentReducer,
+    [announcementSlice.reducerPath]: announcementSlice.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(announcementSlice.middleware),
+  // preloadedState: loadState(),
 });
 
 store.subscribe(() => {
@@ -33,6 +40,7 @@ store.subscribe(() => {
 export type RootState = {
   bell: ReturnType<typeof BellReducer>;
   student: ReturnType<typeof StudentReducer>;
+  announcement: ReturnType<typeof announcementSlice.reducer>;
 };
 // Or, keep the inferred version:
 export type AppDispatch = typeof store.dispatch;

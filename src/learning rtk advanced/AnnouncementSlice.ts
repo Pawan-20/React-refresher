@@ -1,59 +1,98 @@
-// import {
-//   createEntityAdapter,
-//   createSlice,
-//   PayloadAction,
-// } from "@reduxjs/toolkit";
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import axios from "axios";
 
-// interface Announcement {
+// type Announcement = {
 //   id: string;
 //   message: string;
-//   acknowledgedBy: string[];
-// }
+// };
 
-// // 1. Create adapter
-// const announcementsAdapter = createEntityAdapter<Announcement>({
-//   sortComparer: (a, b) => a.message.localeCompare(b.message),
-// });
+// type State = {
+//   announcements: Announcement[];
+//   currentPage: number;
+//   pageSize: number;
+//   totalPages: number;
+//   status: "idle" | "loading" | "succeeded" | "failed";
+// };
 
-// // 2. Adapter initial state
-// const initialState = announcementsAdapter.getInitialState();
+// const initialState: State = {
+//   announcements: [],
+//   currentPage: 1,
+//   pageSize: 2,
+//   totalPages: 1,
+//   status: "idle",
+// };
 
-// const announcementSlice = createSlice({
-//   name: "announcement",
+// export const fetchPaginatedAnnouncements = createAsyncThunk(
+//   "bell/fetchPaginated",
+//   async ({ page, limit }: { page: number; limit: number }) => {
+//     const res = await axios.get(
+//       `http://localhost:3001/announcements?page=${page}&_limit=${limit}`
+//     );
+
+//     return {
+//       data: res.data,
+//       totalCount: parseInt(res.headers["x-total-count"], 10),
+//     };
+//   }
+// );
+
+// const bellSlice = createSlice({
+//   name: "bell",
 //   initialState,
 //   reducers: {
-//     loadFromServer(state, action: PayloadAction<Announcement[]>) {
-//       announcementsAdapter.setAll(state, action.payload);
+//     goToPage(state, action) {
+//       state.currentPage = action.payload;
 //     },
-//     setAnnouncements: announcementsAdapter.setAll,
-//     addAnnouncement: announcementsAdapter.addOne,
-//     updateAcknowledgement(
-//       state,
-//       action: PayloadAction<{ id: string; student: string }>
-//     ) {
-//       const existing = state.entities[action.payload.id];
-//       if (
-//         existing &&
-//         !existing.acknowledgedBy.includes(action.payload.student)
-//       ) {
-//         existing.acknowledgedBy.push(action.payload.student);
-//       }
-//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder.addCase(fetchPaginatedAnnouncements.fulfilled, (state, action) => {
+//       state.announcements = action.payload.data;
+//       state.totalPages = Math.ceil(action.payload.totalCount / state.pageSize);
+//       state.status = "succeeded";
+//     });
 //   },
 // });
 
-// export const {
-//   selectAll: selectAllAnnouncements,
-//   selectById: selectAnnouncementById,
-// } = announcementsAdapter.getSelectors(
-//   (state: { announcement: typeof initialState }) => state.announcement
-// );
+// export const { goToPage } = bellSlice.actions;
+// export default bellSlice.reducer;
 
-// export const {
-//   setAnnouncements,
-//   addAnnouncement,
-//   updateAcknowledgement,
-//   loadFromServer,
-// } = announcementSlice.actions;
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import axios from "axios";
 
-// export default announcementSlice.reducer;
+type Announcement = {
+  id: string;
+  message: string;
+};
+
+type State = {
+  announcements: Announcement[];
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  status: "idle" | "loading" | "succeeded" | "failed";
+};
+
+const initialState: State = {
+  announcements: [],
+};
+
+export const announcementSlice = createApi({
+  reducerPath: "announcements",
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/" }),
+  endpoints: (builder) => ({
+    getAnnouncements: builder.query({
+      query: () => "announcements",
+    }),
+    addAnnouncement: builder.mutation({
+      query: (newAnnouncement) => ({
+        url: "announcements",
+        method: "POST",
+        body: newAnnouncement,
+      }),
+    }),
+  }),
+});
+
+export const { useGetAnnouncementsQuery, useAddAnnouncementMutation } =
+  announcementSlice;
