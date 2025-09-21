@@ -29,6 +29,20 @@
     {
       "id": "14f4",
       "message": "Hello"
+    },
+    {
+      "id": "a531",
+      "message": "sdasda"
+    },
+    {
+      "id": "2959",
+      "input": "dasdas"
+    },
+    {
+      "id": "7a10",
+      "newAnnouncement": {
+        "message": "dasds"
+      }
     }
   ]
 }

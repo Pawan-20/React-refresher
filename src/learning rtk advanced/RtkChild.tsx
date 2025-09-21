@@ -5,8 +5,13 @@ import {
 } from "./AnnouncementSlice";
 
 const Classroom = () => {
-  const { data, error, isLoading } = useGetAnnouncementsQuery(undefined);
-  const [addAnnouncement] = useAddAnnouncementMutation(); // 👈 Setup mutation hook
+  const {
+    data,
+    error: queryError,
+    isLoading,
+  } = useGetAnnouncementsQuery(undefined);
+  const [addAnnouncement, { error: mutationError }] =
+    useAddAnnouncementMutation(); // 👈 Setup mutation hook
   const [input, setInput] = useState("");
 
   const handleAdd = async () => {
@@ -20,8 +25,18 @@ const Classroom = () => {
     }
   };
 
-  if (isLoading) return <p>Loading 🌀...</p>;
-  if (error) return <p>Something went wrong ❌</p>;
+  // Helper to render RTK Query errors
+  function getErrorMessage(error: any) {
+    console.log(error, "error");
+    if (!error) return null;
+    if ("status" in error) {
+      // FetchBaseQueryError
+      return `Error ${error.status}: ${
+        error.error || JSON.stringify(error.data)
+      }`;
+    }
+    return error.message || "Something went wrong";
+  }
 
   return (
     <div className="p-4">
@@ -41,12 +56,15 @@ const Classroom = () => {
           Add
         </button>
       </div>
-
-      {data?.map((a: any) => (
-        <div key={a.id} className="border p-2 mb-2">
-          <strong>{a.message}</strong>
-        </div>
-      ))}
+      {queryError || mutationError ? (
+        <span>{getErrorMessage(queryError || mutationError)}</span>
+      ) : (
+        data?.map((a: any) => (
+          <div key={a.id} className="border p-2 mb-2">
+            <strong>{a.message}</strong>
+          </div>
+        ))
+      )}
     </div>
   );
 };

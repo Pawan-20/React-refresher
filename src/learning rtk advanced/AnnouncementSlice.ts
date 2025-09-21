@@ -73,13 +73,9 @@ type State = {
   status: "idle" | "loading" | "succeeded" | "failed";
 };
 
-const initialState: State = {
-  announcements: [],
-};
-
 export const announcementSlice = createApi({
   reducerPath: "announcements",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
   endpoints: (builder) => ({
     getAnnouncements: builder.query({
       query: () => "announcements",
@@ -88,7 +84,7 @@ export const announcementSlice = createApi({
       query: (newAnnouncement) => ({
         url: "announcements",
         method: "POST",
-        body: newAnnouncement,
+        body: { newAnnouncement },
       }),
     }),
   }),
