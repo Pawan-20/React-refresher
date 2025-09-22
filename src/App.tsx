@@ -28,7 +28,6 @@ export default function App() {
         path="/data-verification"
         element={<DataVerificationPage></DataVerificationPage>}
       ></Route>
-      <Route path="/test" element={<Test></Test>}></Route>
       <Route path="/loader" element={<Loader></Loader>}></Route>
       <Route path="/c2p1" element={<Parent1></Parent1>}></Route>
       <Route path="/c2p2" element={<Parent2></Parent2>}></Route>

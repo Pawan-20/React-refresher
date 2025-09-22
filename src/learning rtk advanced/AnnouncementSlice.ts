@@ -75,17 +75,28 @@ type State = {
 
 export const announcementSlice = createApi({
   reducerPath: "announcements",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3001/" }),
+  tagTypes: ["Announcement"],
   endpoints: (builder) => ({
     getAnnouncements: builder.query({
       query: () => "announcements",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map((announcement: { id: string }) => ({
+                type: "Announcement" as const,
+                id: announcement.id,
+              })),
+            ]
+          : [{ type: "Announcement", id: "LIST" }],
     }),
     addAnnouncement: builder.mutation({
       query: (newAnnouncement) => ({
         url: "announcements",
         method: "POST",
-        body: { newAnnouncement },
+        body: newAnnouncement,
       }),
+      invalidatesTags: [{ type: "Announcement", id: "LIST" }],
     }),
   }),
 });

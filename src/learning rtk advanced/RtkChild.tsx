@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import {
   useGetAnnouncementsQuery,
   useAddAnnouncementMutation,
@@ -10,15 +10,32 @@ const Classroom = () => {
     error: queryError,
     isLoading,
   } = useGetAnnouncementsQuery(undefined);
-  const [addAnnouncement, { error: mutationError }] =
-    useAddAnnouncementMutation(); // 👈 Setup mutation hook
+  const [
+    addAnnouncement,
+    { error: mutationError, isLoading: isMutationLoading },
+  ] = useAddAnnouncementMutation();
   const [input, setInput] = useState("");
 
-  const handleAdd = async () => {
-    if (!input.trim()) return;
+  const handleAdd = async (e: any) => {
+    console.log("handleAdd called", e.type); // Debug log
+    e.preventDefault();
+    e.stopPropagation(); // Extra safety
+
+    if (!input.trim()) {
+      console.log("Input is empty, returning early");
+      return;
+    }
+
+    console.log("About to call mutation with:", input);
 
     try {
-      await addAnnouncement({ message: input }).unwrap(); // 👈 Call API
+      const result = await addAnnouncement({
+        id: crypto.randomUUID(),
+        message: input,
+        acknowledgedBy: [],
+      }).unwrap();
+
+      console.log("Mutation successful:", result);
       setInput("");
     } catch (err) {
       console.error("Failed to add announcement:", err);
@@ -30,7 +47,6 @@ const Classroom = () => {
     console.log(error, "error");
     if (!error) return null;
     if ("status" in error) {
-      // FetchBaseQueryError
       return `Error ${error.status}: ${
         error.error || JSON.stringify(error.data)
       }`;
@@ -39,32 +55,53 @@ const Classroom = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-screen bg-amber-50">
       <h2 className="text-xl font-bold mb-4">📢 Announcements</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum ipsa
+        quasi nihil! Natus maxime amet modi excepturi incidunt, iste ullam
+        soluta recusandae nostrum ab inventore qui doloribus enim praesentium
+        reprehenderit voluptatem consectetur non!
+      </p>
 
+      {/* Method 1: Form with onSubmit */}
       <div className="mb-4">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter announcement"
-          className="border p-2 mr-2"
-        />
-        <button
-          onClick={handleAdd}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add
-        </button>
+        <form onSubmit={handleAdd}>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Enter announcement (Form method)"
+            className="border p-2 mr-2"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            disabled={isMutationLoading}
+          >
+            {isMutationLoading ? "Adding..." : "Add (Submit)"}
+          </button>
+        </form>
       </div>
-      {queryError || mutationError ? (
-        <span>{getErrorMessage(queryError || mutationError)}</span>
-      ) : (
-        data?.map((a: any) => (
-          <div key={a.id} className="border p-2 mb-2">
-            <strong>{a.message}</strong>
-          </div>
-        ))
+
+      {/* Error display */}
+      {(queryError || mutationError) && (
+        <div className="mb-4 p-2 bg-red-100 border border-red-400">
+          <strong>Error:</strong>{" "}
+          {getErrorMessage(queryError ? queryError : mutationError)}
+        </div>
       )}
+
+      {/* Data display */}
+      <div>
+        <h3 className="font-semibold mb-2">
+          Announcements ({data?.length || 0}):
+        </h3>
+        {data?.map((a: any) => (
+          <div key={a.id} className="border p-2 mb-2">
+            <strong>{a.message}</strong> (ID: {a.id})
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
