@@ -18,6 +18,20 @@ import RTKIndex from "./rtk/RTKIndex";
 import RTKIndex2 from "./rtkLevel2/RTKIndex2";
 import RTKIndex3 from "./rtkLevel3/RTKIndex3";
 import Index4 from "./learning rtk advanced/Index4";
+import UseStateHook from "./hooks/UseStateHook";
+import UseEffectHook from "./hooks/UseEffectHook";
+import UseMemoHook from "./hooks/UseMemoHook";
+import UseCallbackHook from "./hooks/useCallbackHook";
+import CustomHookExample from "./hooks/CustomHookExample";
+import UseLayoutEffectHook from "./hooks/UseLayoutEffectHook";
+import UseTransitionHook from "./hooks/UseTransitionHook";
+import UseDeferredValueHook from "./hooks/UseDeferredValueHook";
+import UseImperativeHandle from "./hooks/UseImperativeHandle";
+import UseHook from "./hooks/UseHook";
+import { Suspense } from "react";
+import UseFormStateHook from "./hooks/UseFormStateHook";
+import UseOptimisticHook from "./hooks/UseOptimisticHook";
+import UseActionState from "./hooks/UseActionState";
 
 export default function App() {
   return (
@@ -38,6 +52,26 @@ export default function App() {
       <Route path="/rtk2" element={<RTKIndex2 />}></Route>
       <Route path="/rtk3" element={<RTKIndex3 />}></Route>
       <Route path="/rtk4" element={<Index4 />}></Route>
+      <Route path="/hook1" element={<UseStateHook />}></Route>
+      <Route path="/hook2" element={<UseEffectHook />}></Route>
+      <Route path="/hook3" element={<UseMemoHook />}></Route>
+      <Route path="/hook4" element={<UseCallbackHook />}></Route>
+      <Route path="/hook5" element={<CustomHookExample />}></Route>
+      <Route path="/hook6" element={<UseLayoutEffectHook />}></Route>
+      <Route path="/hook7" element={<UseTransitionHook />}></Route>
+      <Route path="/hook8" element={<UseDeferredValueHook />}></Route>
+      <Route path="/hook9" element={<UseImperativeHandle />}></Route>
+      <Route
+        path="/hook10"
+        element={
+          <Suspense fallback={<p>Loading Hook10...</p>}>
+            <UseHook url="https://jsonplaceholder.typicode.com/comments/1" />
+          </Suspense>
+        }
+      />
+      <Route path="/hook11" element={<UseFormStateHook />}></Route>
+      <Route path="/hook12" element={<UseOptimisticHook />}></Route>
+      <Route path="/hook13" element={<UseActionState />}></Route>
       <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
       {/* replace  does not remember the fake route */}
     </Routes>
