@@ -32,6 +32,9 @@ import { Suspense } from "react";
 import UseFormStateHook from "./hooks/UseFormStateHook";
 import UseOptimisticHook from "./hooks/UseOptimisticHook";
 import UseActionState from "./hooks/UseActionState";
+import CenterADiv from "./small-concepts/CenterADiv";
+import Debouncer from "./small-concepts/Debouncer";
+import Throtller from "./small-concepts/Throttler";
 
 export default function App() {
   return (
@@ -72,6 +75,10 @@ export default function App() {
       <Route path="/hook11" element={<UseFormStateHook />}></Route>
       <Route path="/hook12" element={<UseOptimisticHook />}></Route>
       <Route path="/hook13" element={<UseActionState />}></Route>
+      <Route element={<CenterADiv></CenterADiv>} path="/center"></Route>
+      <Route element={<Debouncer></Debouncer>} path="/debouncer"></Route>
+      <Route element={<Throtller></Throtller>} path="/throttler"></Route>
+
       <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
       {/* replace  does not remember the fake route */}
     </Routes>

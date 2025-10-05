@@ -1,0 +1,100 @@
+.parent-div1 {
+  background-color: red;
+  height: 400px;
+  width: 400px;
+  display: flex; /* or geid */
+  justify-content: center;
+  align-items: center;
+}
+.child-div1 {
+  background-color: white;
+  height: 100px;
+  width: 100px;
+}
+/*
+line height should be of the same height as the parent
+This is for vertically center + horizontally center
+Question : Why should the height be same as line height? 
+Question : does the inline-block + text-align : center works only for inline-block children?
+.parent {
+  height: 200px;
+  line-height: 200px; 
+  background: lightgray;
+  text-align: center;
+}
+.child {
+  display: inline-block;
+  line-height: normal;
+}
+  */
+
+/* this one's only for vertically center
+    .parent{
+    position: relative;
+    height:200px;
+    height:200px;
+    background-color: lime;
+
+}
+.child{
+    position: absolute;
+    top:50%;
+   transform: translateY(-50%);
+    height:50px;
+    width:50px;
+    background-color:blueviolet ;
+
+}
+    */
+
+/* Here what is this translate Y ? don't we have  top 50% already?
+    .parent{
+    position: relative;
+    height:200px;
+    height:200px;
+    background-color: lime;
+
+}
+.child{
+    position: absolute;
+    top:50%;
+   transform: translateY(-50%);
+    height:50px;
+    width:50px;
+    background-color:blueviolet ;
+
+}
+    */
+
+/*
+.parent {
+  position: relative;
+  height: 200px;
+  background: red;
+}
+
+.child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  height:10px;
+  width:10px;
+  transform: translate(-50%, -50%);
+}
+
+*/
+
+.parent {
+  height: 400px;
+  width: 400px;
+  background-color: azure;
+  line-height: 400px;
+  text-align: center;
+}
+.child {
+  background-color: lime;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
